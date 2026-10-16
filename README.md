@@ -6,7 +6,7 @@
 python -m venv .venv
 source .venv/bin/activate            # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env                 # Windows: copy .env.example .env  → pegar ANTHROPIC_API_KEY
+cp .env.example .env                 # Windows: copy .env.example .env  → pegar GEMINI_API_KEY (gratis)
 streamlit run app.py
 ```
 
@@ -16,13 +16,12 @@ Abrir http://localhost:8501.
 - **Datos**: subir los archivos oficiales (CSV, XLSX o JSON) de espacios y equipos, o dejarlos en `data/oficial/` y pulsar "Cargar carpeta". También se puede por consola: `python -m scripts.cargar_datos`.
 - **Espacios y reservas**: consultar disponibilidad, reservar, modificar o cancelar, y administrar aulas y cubículos (habilitar o inhabilitar).
 - **Recursos tecnológicos**: préstamos, devoluciones, estado operativo y trazabilidad de cada equipo.
-- **Incidencias (IA)**: reportar, clasificar con IA (Anthropic Claude), ajustar la clasificación, y actualizar el estado con su historial. Si la IA falla, se clasifica manualmente y queda marcado como "Manual (sin IA)".
+- **Incidencias (IA)**: reportar, clasificar con IA (Google Gemini), ajustar la clasificación, y actualizar el estado con su historial. Si la IA falla, se clasifica manualmente y queda marcado como "Manual (sin IA)".
 
 Los datos se guardan en `data/campus.db` y se conservan al reiniciar.
 
 ## Configuración (.env)
-- `ANTHROPIC_API_KEY`: clave de la IA (console.anthropic.com).
-- `ANTHROPIC_MODEL`: opcional, por defecto `claude-sonnet-5-5`.
+- `GEMINI_API_KEY`: **gratis**, se crea sin tarjeta en aistudio.google.com → Get API key. `GEMINI_MODEL` es opcional (por defecto `gemini-3.8-flash`).
 - `IA_TIMEOUT_SEGUNDOS`: opcional, por defecto 30.
 
 ## Estructura

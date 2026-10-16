@@ -1,0 +1,241 @@
+/* Tema visual de la app (responsable: David López).
+   Se inyecta desde core/estilos.py. Usa los data-testid de Streamlit. */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --cg-primario: #2f6fe0;
+  --cg-primario-2: #4a8ff0;
+  --cg-acento: #8ce4ff;
+  --cg-fondo: #2a5390;
+  --cg-superficie: rgba(255, 255, 255, .09);
+  --cg-texto: #ffffff;
+  --cg-texto-suave: #c4d6f2;
+  --cg-borde: rgba(255, 255, 255, .18);
+  --cg-radio: 14px;
+  --cg-sombra: 0 4px 18px rgba(8, 20, 50, .25);
+  --cg-sombra-hover: 0 10px 30px rgba(8, 20, 50, .4);
+}
+
+html, body, [class*="css"], .stApp, button, input, textarea, select {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif !important;
+}
+
+.stApp { background: linear-gradient(160deg, #1f4580 0%, var(--cg-fondo) 45%, #3769b3 100%) fixed; color: var(--cg-texto); }
+
+/* Barra superior transparente */
+[data-testid="stHeader"] { background: transparent; }
+
+.block-container { padding-top: 2rem; max-width: 1300px; }
+
+/* Textos sobre el fondo azul */
+.stApp p, .stApp label, .stApp span, .stApp li, [data-testid="stCaptionContainer"] { color: inherit; }
+[data-testid="stWidgetLabel"] p, [data-testid="stCaptionContainer"] { color: var(--cg-texto-suave) !important; }
+
+/* ---------- Encabezados ---------- */
+h1, h2, h3 { color: var(--cg-texto); letter-spacing: -.02em; }
+h2 { font-weight: 800 !important; }
+h3 { font-weight: 700 !important; font-size: 1.15rem !important; margin-top: .6rem; }
+
+/* ---------- Sidebar ---------- */
+[data-testid="stSidebar"] {
+  background: linear-gradient(180deg, #12244d 0%, #1a2f63 100%);
+  border-right: 1px solid rgba(255, 255, 255, .08);
+}
+[data-testid="stSidebar"] * { color: #e6f0ff !important; }
+[data-testid="stSidebar"] [role="radiogroup"] { gap: .25rem; }
+[data-testid="stSidebar"] [role="radiogroup"] label {
+  padding: .6rem .85rem;
+  border-radius: 10px;
+  transition: background .2s, transform .2s;
+  cursor: pointer;
+}
+[data-testid="stSidebar"] [role="radiogroup"] label:hover {
+  background: rgba(255, 255, 255, .08);
+  transform: translateX(3px);
+}
+[data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked) {
+  background: rgba(255, 255, 255, .16);
+  box-shadow: inset 3px 0 0 var(--cg-acento);
+  font-weight: 600;
+}
+/* oculta el circulito del radio */
+[data-testid="stSidebar"] [role="radiogroup"] label > div:first-child { display: none; }
+
+.cg-sidebar-marca {
+  background: #fff; border-radius: 16px; padding: .9rem .9rem .6rem;
+  margin: .2rem 0 1.2rem; text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+}
+.cg-sidebar-marca img { width: 120px; max-width: 70%; display: block; margin: 0 auto; }
+.cg-sidebar-marca span {
+  display: block; margin-top: .35rem; font-weight: 700; font-size: .8rem;
+  letter-spacing: .06em; text-transform: uppercase; color: #1a2f63 !important;
+}
+.cg-reloj {
+  margin-top: 1rem; padding: .75rem .9rem; border-radius: 12px;
+  background: rgba(255, 255, 255, .08); font-size: .85rem; line-height: 1.4;
+}
+.cg-reloj b { font-size: 1.35rem; display: block; font-variant-numeric: tabular-nums; }
+
+/* ---------- Hero ---------- */
+.cg-hero {
+  position: relative; overflow: hidden;
+  padding: 2rem 2.2rem; margin-bottom: 1.6rem;
+  border-radius: 20px; color: #fff;
+  background: linear-gradient(120deg, #1a2f63 0%, var(--cg-primario) 55%, var(--cg-acento) 140%);
+  box-shadow: 0 12px 40px rgba(8, 20, 50, .4);
+  animation: cg-aparecer .5s ease both;
+}
+.cg-hero::after {
+  content: ""; position: absolute; right: -60px; top: -60px;
+  width: 260px; height: 260px; border-radius: 50%;
+  background: rgba(255, 255, 255, .12);
+}
+.cg-hero h1 { color: #fff !important; margin: 0 0 .35rem; font-size: 2rem; font-weight: 800; padding: 0; }
+.cg-hero p { margin: 0; opacity: .9; font-size: 1rem; }
+.cg-hero .cg-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.cg-chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  padding: .3rem .75rem; border-radius: 999px; font-size: .8rem; font-weight: 600;
+  background: rgba(255, 255, 255, .18); backdrop-filter: blur(4px);
+}
+.cg-chip.ok::before, .cg-chip.warn::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%;
+}
+.cg-chip.ok::before { background: #4ade80; box-shadow: 0 0 0 3px rgba(74, 222, 128, .3); }
+.cg-chip.warn::before { background: #fbbf24; box-shadow: 0 0 0 3px rgba(251, 191, 36, .3); }
+
+.cg-seccion {
+  font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--cg-texto-suave); margin: 1.2rem 0 .5rem;
+}
+
+/* ---------- Métricas como tarjetas ---------- */
+[data-testid="stMetric"] {
+  background: var(--cg-superficie); backdrop-filter: blur(8px);
+  border: 1px solid var(--cg-borde);
+  border-radius: var(--cg-radio);
+  padding: 1.1rem 1.25rem;
+  box-shadow: var(--cg-sombra);
+  position: relative; overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+  animation: cg-aparecer .45s ease both;
+}
+[data-testid="stMetric"]::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: linear-gradient(180deg, var(--cg-primario), var(--cg-acento));
+}
+[data-testid="stMetric"]:hover { transform: translateY(-3px); box-shadow: var(--cg-sombra-hover); }
+[data-testid="stMetricLabel"] p {
+  font-size: .82rem !important; font-weight: 600; color: var(--cg-texto-suave);
+  text-transform: uppercase; letter-spacing: .04em;
+}
+[data-testid="stMetricValue"] {
+  font-size: 2rem !important; font-weight: 800; color: var(--cg-texto);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Botones ---------- */
+.stButton > button, .stFormSubmitButton > button, .stDownloadButton > button {
+  border-radius: 10px; font-weight: 600; padding: .5rem 1.2rem;
+  border: 1px solid var(--cg-borde);
+  position: relative; overflow: hidden;
+  transition: transform .15s ease, box-shadow .2s ease, background .2s;
+}
+.stButton > button:hover, .stFormSubmitButton > button:hover {
+  transform: translateY(-1px); box-shadow: var(--cg-sombra-hover);
+  border-color: var(--cg-acento); color: var(--cg-acento);
+}
+.stButton > button[kind="primary"], .stFormSubmitButton > button[kind="primaryFormSubmit"],
+.stFormSubmitButton > button {
+  background: linear-gradient(135deg, var(--cg-primario), var(--cg-primario-2));
+  color: #fff !important; border: none;
+}
+.cg-ripple {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: rgba(255, 255, 255, .5); transform: scale(0);
+  animation: cg-ripple .6s linear;
+}
+
+/* ---------- Pestañas ---------- */
+/* Se usan los atributos role=, estables entre versiones de Streamlit. */
+[role="tablist"] {
+  display: inline-flex !important; flex-wrap: wrap; gap: .35rem !important;
+  width: fit-content !important; max-width: 100%; align-self: flex-start;
+  background: var(--cg-superficie); padding: .35rem !important;
+  border-radius: 999px; border: 1px solid var(--cg-borde) !important;
+  box-shadow: var(--cg-sombra);
+}
+[role="tablist"]::after, [role="tablist"]::before { display: none !important; }
+[role="tab"] {
+  height: auto !important; margin: 0 !important;
+  padding: .5rem 1.1rem !important; border-radius: 999px !important;
+  border: none !important; background: transparent;
+  font-weight: 600; color: var(--cg-texto-suave) !important;
+  transition: background .2s, color .2s, box-shadow .2s;
+}
+[role="tab"] p { font-weight: 600 !important; font-size: .92rem !important; color: inherit !important; }
+[role="tab"]:hover { background: rgba(255, 255, 255, .12) !important; color: #fff !important; }
+[role="tab"][aria-selected="true"] {
+  background: linear-gradient(135deg, var(--cg-primario), var(--cg-primario-2)) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 14px rgba(47, 111, 224, .35);
+}
+/* Oculta la línea/indicador cuadrado de Streamlit bajo las pestañas */
+.stTabs [data-baseweb="tab-highlight"], .stTabs [data-baseweb="tab-border"],
+[role="tablist"] + div:empty, [role="tab"]::after,
+[role="tablist"] > div:not([role="tab"]):not(:has([role="tab"])) { display: none !important; }
+[role="tab"] { border-bottom: none !important; }
+[role="tabpanel"] { padding-top: 1.2rem; animation: cg-aparecer .3s ease both; }
+
+/* ---------- Formularios, contenedores y tablas ---------- */
+[data-testid="stForm"], [data-testid="stExpander"] details {
+  background: var(--cg-superficie); backdrop-filter: blur(8px);
+  border: 1px solid var(--cg-borde) !important;
+  border-radius: var(--cg-radio);
+  box-shadow: var(--cg-sombra);
+  padding: 1.2rem;
+}
+[data-testid="stDataFrame"] {
+  border-radius: var(--cg-radio); overflow: hidden;
+  border: 1px solid var(--cg-borde); box-shadow: var(--cg-sombra);
+}
+[data-baseweb="input"], [data-baseweb="select"] > div, [data-baseweb="textarea"] {
+  border-radius: 10px !important;
+}
+[data-baseweb="input"]:focus-within, [data-baseweb="select"] > div:focus-within, [data-baseweb="textarea"]:focus-within {
+  box-shadow: 0 0 0 3px rgba(140, 228, 255, .35);
+}
+[data-testid="stFileUploaderDropzone"] {
+  border-radius: var(--cg-radio); border: 2px dashed rgba(140, 228, 255, .5); background: rgba(255, 255, 255, .06);
+  transition: border-color .2s, background .2s;
+}
+[data-testid="stFileUploaderDropzone"]:hover { border-color: var(--cg-acento); background: rgba(255, 255, 255, .12); }
+
+/* ---------- Alertas ---------- */
+[data-testid="stAlert"] {
+  border-radius: 12px; border: none; box-shadow: var(--cg-sombra);
+  animation: cg-deslizar .35s ease both;
+}
+
+hr { border-color: var(--cg-borde) !important; }
+
+/* ---------- Animaciones ---------- */
+@keyframes cg-aparecer { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes cg-deslizar { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+@keyframes cg-ripple { to { transform: scale(4); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- Móvil ---------- */
+@media (max-width: 640px) {
+  .cg-hero { padding: 1.4rem; }
+  .cg-hero h1 { font-size: 1.5rem; }
+  [data-testid="stMetricValue"] { font-size: 1.6rem !important; }
+}
+
+/* Contenedor del iframe que carga interacciones.js: invisible */
+.st-key-cg_js { display: none !important; }

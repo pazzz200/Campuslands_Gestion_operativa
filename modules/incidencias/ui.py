@@ -23,9 +23,9 @@ def _idx(lista, valor):
 def _registrar():
     st.subheader("Reportar incidencia")
     if ia_client.ia_configurada():
-        st.caption("Clasificación con IA real: Anthropic Claude (modelo configurado en .env).")
+        st.caption(f"Clasificación con IA real: {ia_client.nombre_proveedor()}.")
     else:
-        st.warning("IA no configurada (falta ANTHROPIC_API_KEY). Se usará clasificación **MANUAL**.")
+        st.warning("IA no configurada (falta GEMINI_API_KEY en .env). Se usará clasificación **MANUAL**.")
 
     esp_ids = ["(ninguno)", *[e["id"] for e in espacios.listar_espacios()]]
     eq_ids = ["(ninguno)", *[e["id"] for e in recursos.listar_equipos()]]

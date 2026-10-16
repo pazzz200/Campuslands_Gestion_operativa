@@ -11,6 +11,7 @@ import streamlit as st
 
 from core import db
 from core.data_loader import cargar_archivo, cargar_carpeta
+from core.estilos import aplicar_estilos, hero, marca_sidebar, reloj_sidebar, seccion
 from core.config import BASE_DIR
 from core.ui_utils import ejecutar
 from modules.espacios import service as espacios_svc
@@ -22,7 +23,7 @@ from modules.recursos import service as recursos_svc
 from modules.recursos import ui as recursos_ui
 
 logging.basicConfig(level=logging.INFO)
-st.set_page_config(page_title="Gestión de Campus", page_icon="🏫", layout="wide")
+st.set_page_config(page_title="Gestión de Campus · Campuslands", page_icon=str(BASE_DIR / "static" / "logo.png"), layout="wide")
 
 
 @st.cache_resource
@@ -32,21 +33,27 @@ def _inicializar():
 
 
 def pagina_inicio():
-    st.title("🏫 Gestión de espacios, recursos e incidencias")
     e, r, i = espacios_svc.resumen(), recursos_svc.resumen(), incidencias_svc.resumen()
+    ia_ok = ia_client.ia_configurada()
+    hero("Gestión de espacios, recursos e incidencias",
+         "Panel general del campus: reservas, préstamos de equipos e incidencias en un vistazo.",
+         [(f"IA activa · {ia_client.nombre_proveedor()}" if ia_ok else "IA no configurada · modo manual", "ok" if ia_ok else "warn"),
+          (f"{i['incidencias_abiertas']} incidencias abiertas", "warn" if i["incidencias_criticas"] else "ok")])
+    seccion("Espacios y recursos")
     c = st.columns(4)
     c[0].metric("Espacios", e["espacios_total"], f"{e['espacios_inhabilitados']} inhabilitados", delta_color="off")
     c[1].metric("Reservas hoy", e["reservas_hoy"], f"{e['reservas_futuras']} futuras", delta_color="off")
     c[2].metric("Equipos disponibles", f"{r['equipos_disponibles']}/{r['equipos_total']}")
     c[3].metric("Préstamos activos", r["prestamos_activos"], f"{r['prestamos_vencidos']} vencidos",
                 delta_color="inverse")
+    seccion("Incidencias")
     c = st.columns(4)
     c[0].metric("Incidencias abiertas", i["incidencias_abiertas"])
     c[1].metric("Alta / crítica", i["incidencias_criticas"])
     c[2].metric("Clasificadas por IA", i["clasificadas_ia"])
     c[3].metric("Clasificadas manual", i["clasificadas_manual"])
     st.caption(f"Base de datos: `{db.get_db_path()}` · IA: "
-               f"{'configurada (Anthropic Claude)' if ia_client.ia_configurada() else 'NO configurada → modo manual'}")
+               f"{ia_client.nombre_proveedor() if ia_ok else 'NO configurada → modo manual'}")
     if e["espacios_total"] == 0 and r["equipos_total"] == 0:
         st.warning("La base está vacía. Cargue los archivos oficiales en **Datos** o registre espacios y equipos desde cada módulo.")
 
@@ -90,7 +97,10 @@ PAGINAS = {
 
 def main():
     _inicializar()
-    pagina = st.sidebar.radio("Menú", list(PAGINAS))
+    aplicar_estilos()
+    marca_sidebar()
+    pagina = st.sidebar.radio("Menú", list(PAGINAS), label_visibility="collapsed")
+    reloj_sidebar()
     st.sidebar.caption("Hackatón Campuslands · MVP")
     try:
         PAGINAS[pagina]()

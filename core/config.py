@@ -26,12 +26,18 @@ def db_path() -> str:
     return get("DB_PATH", str(BASE_DIR / "data" / "campus.db"))
 
 
-def anthropic_api_key() -> str | None:
-    return get("ANTHROPIC_API_KEY")
+def gemini_api_key() -> str | None:
+    return get("GEMINI_API_KEY")
 
 
-def anthropic_model() -> str:
-    return get("ANTHROPIC_MODEL", "claude-sonnet-5-5")
+def gemini_model() -> str:
+    return get("GEMINI_MODEL", "gemini-3.8-flash")
+
+
+def gemini_modelos_respaldo() -> list[str]:
+    """Modelos que se prueban, en orden, si el principal está saturado o no disponible."""
+    valor = get("GEMINI_MODELOS_RESPALDO", "gemini-3.7-flash,gemini-flash-latest,gemini-flash-lite-latest")
+    return [m.strip() for m in valor.split(",") if m.strip()]
 
 
 def ia_timeout() -> float:

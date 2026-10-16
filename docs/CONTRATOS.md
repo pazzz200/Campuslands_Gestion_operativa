@@ -62,7 +62,7 @@ Constantes: `ESTADOS_OPERATIVOS=('operativo','mantenimiento','danado','baja')`, 
 `disponible` **se calcula** (operativo y sin préstamo activo) y no se guarda.
 
 ## modules.incidencias (Samid)
-`ia_client`: `CATEGORIAS`, `PRIORIDADES=('baja','media','alta','critica')`, `AREAS`, `IAError`, `ia_configurada()`, `validar_respuesta_ia(dict) -> dict`, `clasificar(titulo, descripcion, contexto='', cliente=None) -> {categoria, prioridad, area_responsable, justificacion, confianza, modelo}`.
+`ia_client`: `CATEGORIAS`, `PRIORIDADES=('baja','media','alta','critica')`, `AREAS`, `IAError`, `ia_configurada()`, `nombre_proveedor()`, `validar_respuesta_ia(dict) -> dict`, `clasificar(titulo, descripcion, contexto='') -> {categoria, prioridad, area_responsable, justificacion, confianza, modelo}`.
 
 `service`:
 | Función | Devuelve |

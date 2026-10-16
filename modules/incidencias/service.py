@@ -46,7 +46,7 @@ def _contexto(espacio_id, equipo_id) -> str:
 
 
 def sugerir_clasificacion(titulo: str, descripcion: str, espacio_id: str | None = None,
-                          equipo_id: str | None = None, cliente=None) -> dict:
+                          equipo_id: str | None = None) -> dict:
     """Devuelve SIEMPRE un dict:
     {'ok': True, 'origen': 'IA', 'categoria', 'prioridad', 'area_responsable',
      'justificacion', 'confianza', 'modelo', 'error': None}
@@ -56,7 +56,7 @@ def sugerir_clasificacion(titulo: str, descripcion: str, espacio_id: str | None 
     descripcion = texto_requerido(descripcion, "descripción", 2000)
     contexto = _contexto(espacio_id or None, equipo_id or None)  # R2 también aquí
     try:
-        r = ia_client.clasificar(titulo, descripcion, contexto, cliente=cliente)
+        r = ia_client.clasificar(titulo, descripcion, contexto)
     except IAError as e:
         return {"ok": False, "origen": None, "error": str(e)}
     return {"ok": True, "origen": "IA", "error": None, **r}
