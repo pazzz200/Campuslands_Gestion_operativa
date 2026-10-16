@@ -237,5 +237,14 @@ hr { border-color: var(--cg-borde) !important; }
   [data-testid="stMetricValue"] { font-size: 1.6rem !important; }
 }
 
+/* ---------- Fondo de estrellitas (lo dibuja interacciones.js) ---------- */
+#cg-cielo {
+  position: fixed; inset: 0; width: 100vw; height: 100vh;
+  z-index: 0; pointer-events: none;
+}
+/* El contenido va por encima del canvas y deja ver el degradado + estrellas */
+[data-testid="stAppViewContainer"] { position: relative; z-index: 1; background: transparent !important; }
+[data-testid="stMain"], .main { background: transparent !important; }
+
 /* Contenedor del iframe que carga interacciones.js: invisible */
 .st-key-cg_js { display: none !important; }

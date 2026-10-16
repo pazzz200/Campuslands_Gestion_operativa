@@ -56,10 +56,102 @@
     setTimeout(() => onda.remove(), 650);
   }, true);
 
+  // 4) Fondo de estrellitas: canvas fijo detrás del contenido.
+  const cielo = { canvas: null, ctx: null, estrellas: [], fugaz: null, proximaFugaz: 0, w: 0, h: 0 };
+
+  function crearEstrellas() {
+    const cantidad = Math.round((cielo.w * cielo.h) / 9000);
+    cielo.estrellas = Array.from({ length: cantidad }, () => ({
+      x: Math.random() * cielo.w,
+      y: Math.random() * cielo.h,
+      r: 0.4 + Math.random() * 1.1,
+      fase: Math.random() * Math.PI * 2,
+      vel: 0.6 + Math.random() * 1.4,          // velocidad del titileo
+      sube: 0.02 + Math.random() * 0.06,       // deriva hacia arriba (px/frame)
+      celeste: Math.random() < 0.3,
+    }));
+  }
+
+  function ajustarCielo() {
+    const dpr = win.devicePixelRatio || 1;
+    cielo.w = win.innerWidth;
+    cielo.h = win.innerHeight;
+    cielo.canvas.width = cielo.w * dpr;
+    cielo.canvas.height = cielo.h * dpr;
+    cielo.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    crearEstrellas();
+    if (reducirMovimiento) dibujarCielo(0);
+  }
+
+  function lanzarFugaz(t) {
+    cielo.fugaz = {
+      x: cielo.w * (0.2 + Math.random() * 0.7), y: cielo.h * Math.random() * 0.4,
+      vx: -(5 + Math.random() * 3), vy: 2 + Math.random() * 1.5, vida: 1,
+    };
+    cielo.proximaFugaz = t + 7000 + Math.random() * 9000;
+  }
+
+  function dibujarCielo(t) {
+    const { ctx, w, h } = cielo;
+    ctx.clearRect(0, 0, w, h);
+    for (const e of cielo.estrellas) {
+      if (!reducirMovimiento) {
+        e.y -= e.sube;
+        if (e.y < -2) { e.y = h + 2; e.x = Math.random() * w; }
+      }
+      const brillo = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t / 1000 * e.vel + e.fase));
+      ctx.globalAlpha = brillo;
+      ctx.fillStyle = e.celeste ? "#8ce4ff" : "#ffffff";
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    const f = cielo.fugaz;
+    if (f) {
+      const grad = ctx.createLinearGradient(f.x, f.y, f.x - f.vx * 14, f.y - f.vy * 14);
+      grad.addColorStop(0, "rgba(255,255,255,1)");
+      grad.addColorStop(1, "rgba(140,228,255,0)");
+      ctx.globalAlpha = f.vida;
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(f.x, f.y);
+      ctx.lineTo(f.x - f.vx * 14, f.y - f.vy * 14);
+      ctx.stroke();
+      f.x += f.vx; f.y += f.vy; f.vida -= 0.015;
+      if (f.vida <= 0 || f.x < -50 || f.y > h + 50) cielo.fugaz = null;
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function animarCielo(t) {
+    if (!cielo.fugaz && t > cielo.proximaFugaz) lanzarFugaz(t);
+    dibujarCielo(t);
+    win.requestAnimationFrame(animarCielo);
+  }
+
+  function montarCielo() {
+    const app = doc.querySelector(".stApp");
+    if (!app || doc.getElementById("cg-cielo")) return;
+    cielo.canvas = doc.createElement("canvas");
+    cielo.canvas.id = "cg-cielo";
+    cielo.canvas.setAttribute("aria-hidden", "true");
+    app.prepend(cielo.canvas);
+    cielo.ctx = cielo.canvas.getContext("2d");
+    ajustarCielo();
+    if (!cielo.iniciado) {
+      cielo.iniciado = true;
+      cielo.proximaFugaz = performance.now() + 4000;
+      win.addEventListener("resize", ajustarCielo);
+      if (!reducirMovimiento) win.requestAnimationFrame(animarCielo);
+    }
+  }
+
   // Streamlit redibuja el DOM a menudo: observar y reaplicar.
   function refrescar() {
     doc.querySelectorAll('[data-testid="stMetricValue"] > div').forEach(animarMetrica);
     reloj();
+    montarCielo();
   }
   let pendiente = false;
   new win.MutationObserver(function () {
