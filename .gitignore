@@ -1,0 +1,16 @@
+# Secretos
+.env
+# Base de datos local (cada quien genera la suya)
+data/*.db
+data/*.db-journal
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+# Sistema / editores
+.DS_Store
+.vscode/
+.idea/
+dist/
